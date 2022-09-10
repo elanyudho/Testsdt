@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TestSDT</string>
+    <string name="tv_part_1">Part I</string>
+    <string name="tv_desc">Test Android Developer \nSentuh Digital Teknologi</string>
+    <string name="tv_part2">Part II</string>
+    <string name="tv_search">Search</string>
+    <string name="hint_search">Find Jokes</string>
+    <string name="tv_service_on">Service On</string>
+</resources>
