@@ -24,12 +24,9 @@ class FirstPartActivity : AppCompatActivity() {
             startService(Intent(this@FirstPartActivity, BackgroundService::class.java))
         }
 
-        bgService.setOnButtonClickCallback(object :BackgroundService.OnButtonClickCallback {
-            override fun onButtonClicked(data: String) {
-                binding.tvMessage.text = data
-                binding.tvMessage.visible()
-            }
-
-        })
+        bgService.setOnClickData {
+            binding.tvMessage.text = it
+            binding.tvMessage.visible()
+        }
     }
 }

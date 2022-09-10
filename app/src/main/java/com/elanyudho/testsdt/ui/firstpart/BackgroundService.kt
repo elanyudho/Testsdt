@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
 import com.elanyudho.testsdt.R
+import com.elanyudho.testsdt.domain.model.Jokes
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
@@ -21,11 +22,8 @@ class BackgroundService : Service() {
     companion object {
         internal val TAG = BackgroundService::class.java.simpleName
     }
-    private lateinit var onButtonClickCallback: OnButtonClickCallback
 
-    fun setOnButtonClickCallback(onButtonClickCallback: OnButtonClickCallback) {
-        this.onButtonClickCallback = onButtonClickCallback
-    }
+    private lateinit var onClick: (data: String) -> Unit
 
     private val mLayoutParamsFlags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
     // Views
@@ -52,7 +50,7 @@ class BackgroundService : Service() {
         )
 
         mButton = mButtonView.findViewById(R.id.btn_send_string) as Button
-        mButton.setOnClickListener { onButtonClickCallback.onButtonClicked("HELLO WORLD!") }
+        mButton.setOnClickListener { onClick.invoke("Hello World") }
 
         val windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         windowManager.addView(mButtonView, params)
@@ -72,16 +70,16 @@ class BackgroundService : Service() {
         return START_STICKY
     }
 
+    fun setOnClickData(onClick: (data: String) -> Unit) {
+        this.onClick = onClick
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         serviceJob.cancel()
         val wm = getSystemService(WINDOW_SERVICE) as WindowManager
         wm.removeView(mButtonView)
         Log.d(TAG, "onDestroy: Service Stopped")
-    }
-
-    interface OnButtonClickCallback {
-        fun onButtonClicked(data: String)
     }
 
 }

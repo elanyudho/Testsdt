@@ -30,6 +30,7 @@ class JokesAdapter: RecyclerView.Adapter<JokesAdapter.ViewHolder>() {
             with(listData[position]){
                 binding.tvJoke.text = this.value
                 binding.imageView.glide(binding.imageView, "https://api.chucknorris.io/img/chucknorris_logo_coloured_small@2x.png")
+                binding.root.setOnClickListener { onClick.invoke(this) }
             }
         }
     }
