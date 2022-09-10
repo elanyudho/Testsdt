@@ -25,7 +25,7 @@ class FirstPartActivity : AppCompatActivity() {
         }
 
         bgService.setOnButtonClickCallback(object :BackgroundService.OnButtonClickCallback {
-            override fun onItemClicked(data: String) {
+            override fun onButtonClicked(data: String) {
                 binding.tvMessage.text = data
                 binding.tvMessage.visible()
             }

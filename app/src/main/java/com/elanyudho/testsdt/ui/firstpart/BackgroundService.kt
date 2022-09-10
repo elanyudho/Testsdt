@@ -52,7 +52,7 @@ class BackgroundService : Service() {
         )
 
         mButton = mButtonView.findViewById(R.id.btn_send_string) as Button
-        mButton.setOnClickListener { onButtonClickCallback.onItemClicked("HELLO WORLD!") }
+        mButton.setOnClickListener { onButtonClickCallback.onButtonClicked("HELLO WORLD!") }
 
         val windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         windowManager.addView(mButtonView, params)
@@ -81,7 +81,7 @@ class BackgroundService : Service() {
     }
 
     interface OnButtonClickCallback {
-        fun onItemClicked(data: String)
+        fun onButtonClicked(data: String)
     }
 
 }
