@@ -16,6 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_service_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/service_off"
+        app:layout_constraintEnd_toEndOf="@+id/btn_service_on"
+        app:layout_constraintStart_toStartOf="@+id/btn_service_on"
+        app:layout_constraintTop_toBottomOf="@+id/btn_service_on" />
+
     <TextView
         android:id="@+id/tv_message"
         android:layout_width="wrap_content"
@@ -24,10 +33,10 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/btn_service_on"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/btn_service_on"
-        app:layout_constraintTop_toBottomOf="@+id/btn_service_on"
+        app:layout_constraintTop_toBottomOf="@+id/btn_service_off"
         tools:text="Hello" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

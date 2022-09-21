@@ -1,32 +1,83 @@
 package com.elanyudho.testsdt.ui.firstpart
 
+import android.app.ActivityManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.ServiceConnection
 import android.os.Bundle
-import com.elanyudho.testsdt.R
+import android.os.IBinder
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import com.elanyudho.testsdt.databinding.ActivityFirstPartBinding
-import com.elanyudho.testsdt.utils.extension.visible
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class FirstPartActivity : AppCompatActivity() {
+class FirstPartActivity : AppCompatActivity(), OnItemClickCallback {
 
     private lateinit var binding: ActivityFirstPartBinding
 
-    private val bgService= BackgroundService()
+    var myService: BackgroundService? = null
+
+    private var dataFromService : MutableLiveData<String> = MutableLiveData("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFirstPartBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val intent = Intent(this@FirstPartActivity, BackgroundService::class.java)
 
         binding.btnServiceOn.setOnClickListener {
-            startService(Intent(this@FirstPartActivity, BackgroundService::class.java))
+            startService(intent)
+            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         }
 
-        bgService.setOnClickData {
+        binding.btnServiceOff.setOnClickListener {
+            if (isMyServiceRunning(BackgroundService::class.java)) {
+                unbindService(mConnection)
+                stopService(intent)
+            } else {
+                Toast.makeText(this@FirstPartActivity, "Service is still not running", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+        dataFromService.observe(this@FirstPartActivity
+        ) {
             binding.tvMessage.text = it
-            binding.tvMessage.visible()
+        }
+
+    }
+
+    override fun onItemClicked(data: String) {
+        dataFromService.value = data
+    }
+
+    private val mConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(
+            className: ComponentName,
+            service: IBinder
+        ) {
+            // Binded to LocalService, cast the IBinder and get LocalService instance
+            val binder: BackgroundService.LocalBinder = service as BackgroundService.LocalBinder
+            myService = binder.getService() //Get instance of your service!
+            myService?.onItemClickCallback(this@FirstPartActivity)
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+           return
         }
     }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
 }
